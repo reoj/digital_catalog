@@ -31,7 +31,18 @@ namespace Catalog
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog", Version = "v1" });
+                c.SwaggerDoc( "v1", new OpenApiInfo
+                {
+                    Title = "Online Items Catalog",
+                    Description = "An API to learn the basics of .NET WebApis",                
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Jaciel Israel Reséndiz Ochoa",
+                        Email = "jresendizochoa@deloitte.com",
+                        Url = new Uri("https://github.com/reoj")
+                    },
+                    Version = "v1"
+                });
             });
             
         }

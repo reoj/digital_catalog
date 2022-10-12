@@ -48,6 +48,22 @@ namespace Catalog.Repositories
         {
             return _items.Where(it => it.Id == id).SingleOrDefault();
         }
+
+        public void CreateItem(Item item)
+        {
+            _items.Add(item);
+        }
+
+        public void UpdateItem(Item item)
+        {
+            var index = _items.FindIndex(exItem => exItem.Id == item.Id);
+            _items[index] = item;
+        }
+        public void DeleteItem(Guid id)
+        {
+            var index = _items.FindIndex(exItem => exItem.Id == id);
+            _items.RemoveAt(index);
+        }
         #endregion
     }
 }
