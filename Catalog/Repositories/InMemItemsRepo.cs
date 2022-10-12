@@ -6,46 +6,47 @@ using Catalog.Models;
 
 namespace Catalog.Repositories
 {
-    public class InMemItemsRepo
+    
+    public class InMemItemsRepo : IItemsRepo
     {
         #region Fields
         private readonly List<Item> _items = new()
         {
-            new Item 
+            new Item
             {
                 Name = "Blue Potion",
                 Price = 9.0M,
                 CreatedTime = DateTimeOffset.UtcNow
             },
-            new Item 
+            new Item
             {
                 Name = "Red Potion",
                 Price = 12.0M,
                 CreatedTime = DateTimeOffset.UtcNow
             },
-            new Item 
+            new Item
             {
                 Name = "Iron Sword",
                 Price = 22.5M,
                 CreatedTime = DateTimeOffset.UtcNow
             },
-            new Item 
+            new Item
             {
                 Name = "Bronze Shield",
                 Price = 18.2M,
                 CreatedTime = DateTimeOffset.UtcNow
             }
         };
-         #endregion
-        
+        #endregion
+
         #region Public Methods
-        public IEnumerable<Item> GetItems ()
+        public IEnumerable<Item> GetItems()
         {
             return _items;
         }
-        public Item GetItem (Guid id)
+        public Item GetItem(Guid id)
         {
-            return _items.Where(it => it.Id== id).SingleOrDefault();
+            return _items.Where(it => it.Id == id).SingleOrDefault();
         }
         #endregion
     }
