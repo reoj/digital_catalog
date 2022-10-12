@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Catalog.DTOs;
 using Catalog.Models;
 using Catalog.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -21,16 +22,16 @@ namespace Catalog.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Item> GetItems()
+        public IEnumerable<ItemDTO> GetItems()
         {
-            return _repo.GetItems();
+            return _repo.GetItems().Select( item => item.AsDto());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Item> GetItem(Guid id)
+        public ActionResult<ItemDTO> GetItem(Guid id)
         {
             var foundItem = _repo.GetItem(id);
-            return foundItem is null ? NotFound() : Ok(foundItem);
+            return foundItem is null ? NotFound() : Ok(foundItem.AsDto());
         }
     }
 }
