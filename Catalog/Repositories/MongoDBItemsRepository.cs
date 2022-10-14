@@ -23,35 +23,35 @@ namespace Catalog.Repositories
             _items = db.GetCollection<Item>(collectionName);
         }
         #endregion
-        #region Implementation of interface
-        public void CreateItem(Item item)
+        #region Implementation of Interface
+        public async Task CreateItemAsync(Item item)
         {
             //We use the MongoDB similar to a static collection
-            _items.InsertOne(item);
+            await _items.InsertOneAsync(item);
         }
 
-        public void DeleteItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
             var filter = filterBuilder.Eq(item => item.Id, id);
-            _items.DeleteOne(filter);
+            await _items.DeleteOneAsync(filter);
         }
 
-        public Item GetItem(Guid id)
+        public async Task<Item> GetItemAsync(Guid id)
         {
             // Common Filter is built
             var filter = filterBuilder.Eq(item => item.Id, id);
-            return _items.Find(filter).SingleOrDefault();
+            return await _items.Find(filter).SingleOrDefaultAsync();
         }
 
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return _items.Find(new BsonDocument()).ToList();
+            return await _items.Find(new BsonDocument()).ToListAsync();
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             var filter = filterBuilder.Eq(current => current.Id, item.Id);
-            _items.ReplaceOne(filter,item);
+            await _items.ReplaceOneAsync(filter,item);
         }
         #endregion
     }

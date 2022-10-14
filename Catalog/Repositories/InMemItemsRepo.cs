@@ -40,29 +40,33 @@ namespace Catalog.Repositories
         #endregion
 
         #region Public Methods
-        public IEnumerable<Item> GetItems()
+        public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            return _items;
+            return await Task.FromResult(_items);
         }
-        public Item GetItem(Guid id)
+        public async Task<Item> GetItemAsync(Guid id)
         {
-            return _items.Where(it => it.Id == id).SingleOrDefault();
+            var item = _items.Where(it => it.Id == id).SingleOrDefault();
+            return await Task.FromResult(item);
         }
 
-        public void CreateItem(Item item)
+        public async Task CreateItemAsync(Item item)
         {
             _items.Add(item);
+            await Task.CompletedTask;
         }
 
-        public void UpdateItem(Item item)
+        public async Task UpdateItemAsync(Item item)
         {
             var index = _items.FindIndex(exItem => exItem.Id == item.Id);
             _items[index] = item;
+            await Task.CompletedTask;
         }
-        public void DeleteItem(Guid id)
+        public async Task DeleteItemAsync(Guid id)
         {
             var index = _items.FindIndex(exItem => exItem.Id == id);
             _items.RemoveAt(index);
+            await Task.CompletedTask;
         }
         #endregion
     }

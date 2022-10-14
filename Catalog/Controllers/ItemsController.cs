@@ -14,27 +14,32 @@ namespace Catalog.Controllers
     [Route("Items")]
     public class ItemsController : ControllerBase
     {
+        #region Singleton
         private readonly IItemsRepo _repo;
+        #endregion
 
+        #region Constructor
         public ItemsController(IItemsRepo repo)
         {
             this._repo = repo;
         }
+        #endregion
 
+        #region HTTP Methods
         [HttpGet]
-        public IEnumerable<ItemDTO> GetItems()
+        public async Task<IEnumerable<ItemDTO>> GetItemsAsync()
         {
-            return _repo.GetItems().Select( item => item.AsDto());
+            return (await _repo.GetItemsAsync()).Select( item => item.AsDto());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ItemDTO> GetItem(Guid id)
+        public async Task <ActionResult<ItemDTO>> GetItemAsync(Guid id)
         {
-            var foundItem = _repo.GetItem(id);
+            var foundItem = await _repo.GetItemAsync(id);
             return foundItem is null ? NotFound() : Ok(foundItem.AsDto());
         }
         [HttpPost]
-        public ActionResult<ItemDTO> CreateItem (CreateItemDTO createItemDTO)
+        public async Task<ActionResult<ItemDTO>> CreateItemAsync (CreateItemDTO createItemDTO)
         {
             Item it = new(){
                 Id = Guid.NewGuid(),
@@ -43,14 +48,14 @@ namespace Catalog.Controllers
                 CreatedTime = DateTimeOffset.UtcNow
             };
 
-            _repo.CreateItem(it);
+            await _repo.CreateItemAsync(it);
 
-            return CreatedAtAction(nameof(GetItem), new {id = it.Id},it.AsDto());
+            return CreatedAtAction(nameof(GetItemAsync), new {id = it.Id},it.AsDto());
         }
         [HttpPut("{id}")]
-        public ActionResult UpdateItem (Guid id, UpdateItemDTO ItemDTO)
+        public async Task<ActionResult> UpdateItemAsync (Guid id, UpdateItemDTO ItemDTO)
         {
-            var exItem = _repo.GetItem(id);
+            var exItem = await _repo.GetItemAsync(id);
 
             if (exItem is null)
             {
@@ -61,24 +66,25 @@ namespace Catalog.Controllers
                     Name = ItemDTO.Name,
                     Price = ItemDTO.Price
                 };
-                _repo.UpdateItem(updatedItem);
+                await _repo.UpdateItemAsync(updatedItem);
 
                 return NoContent();
             }
         }
         [HttpDelete("{id}")]
-        public ActionResult DeleteItem (Guid id)
+        public async Task<ActionResult> DeleteItem (Guid id)
         {
-            var exItem = _repo.GetItem(id);
+            var exItem = await _repo.GetItemAsync(id);
 
             if (exItem is null)
             {
                 return NotFound();
             }else
             {
-                _repo.DeleteItem(id);
+                await _repo.DeleteItemAsync(id);
                 return NoContent();
             }
         }
+        #endregion
     }
 }

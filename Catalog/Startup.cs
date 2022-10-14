@@ -36,7 +36,10 @@ namespace Catalog
             } );// MongoDB inyection
             
             services.AddSingleton<IItemsRepo,MongoDBItemsRepository>(); // Items Service (InMemItemsRepo for local)
-            services.AddControllers();
+            services.AddControllers(options => {        //Changing options to match the names
+                options.SuppressAsyncSuffixInActionNames = false;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc( "v1", new OpenApiInfo
